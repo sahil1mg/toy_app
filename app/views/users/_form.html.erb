@@ -1,27 +1,22 @@
 <%= form_with(model: user, local: true) do |form| %>
-  <% if user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+  <%= render 'shared/error_messages' %>
+  
 
-      <ul>
-      <% user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <% provide(:title, 'Sign up') %>
+  <h1>Sign up</h1>
+  
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :user_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email, id: :user_email %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+        <%= form.label :name %>
+        <%= form.text_field :name, class:"form-control" %>
+  
+        <%= form.label :email %>
+        <%= form.email_field :email , class:"form-control" %>
+  
+        <%= form.label :password %>
+        <%= form.password_field :password , class:"form-control" %>
+  
+        <%= form.label :password_confirmation, "Confirmation" %>
+        <%= form.password_field :password_confirmation , class:"form-control"%>
+  
+        <%= form.submit "Create my account", class: "btn btn-primary" %>
 <% end %>

@@ -1,19 +1,28 @@
+<% provide(:title, @user.name) %>
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
-<% if @user.microposts.first!=nil %>
-  <p>
-    <strong>Micropost:</strong>
-    <%= @user.microposts.first.content %>
+<%= flash[:success] %>
+<div class = "container-fluid">
+<div class="row">
+<aside class="col-md-4">
+  <section class="user_info">
+    <h1>
+      <%= gravatar_for @user %>
+      <%= @user.name %>
+    </h1>
+    <p>
+    <strong>Email:</strong>
+    <%= @user.email %>
   </p>
-<% end %>
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+  </section>
+</aside>
+<div class = "col-md-8">
+    <% if @user.microposts.first!=nil %>
+      <p>
+        <h3>Micropost:</h3>
+        <%= @user.microposts.first.content %>
+      </p>
+    <% end %>
+    <%= link_to 'Edit', edit_user_path(@user) %> |
+    <%= link_to 'Back', users_path %>
+  </div>
+</div>
