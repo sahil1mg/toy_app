@@ -1,0 +1,19 @@
+
+<% provide(:title, "Login") %>
+<h3> Login </h3>
+
+<% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %>"><%= message %></div>
+<% end %>
+
+<%= form_for(:session, url:login_path) do |f| %>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+
+    <%= f.submit "Log In" %>
+
+    <% end %>
+
