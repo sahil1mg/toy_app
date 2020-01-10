@@ -9,7 +9,10 @@ class User < ApplicationRecord
     validates :password_confirmation, presence:true, length: { minimum: 6 }
     has_secure_password
 
-    
+    # Forgets a user.
+    def forget
+        update_attribute(:remember_digest, nil)
+    end
 
     # Remembers a user in the database for use in persistent sessions.
     def remember
@@ -35,9 +38,4 @@ class User < ApplicationRecord
     def self.new_token
         SecureRandom.urlsafe_base64
     end
-
-    # Forgets a user.
-  def forget
-    update_attribute(:remember_digest, nil)
-  end
 end

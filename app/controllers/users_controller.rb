@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:edit, :update]
+  before_action :check_current_user?, only: [:edit, :update]
 
   # GET /users
   # GET /users.json
@@ -10,7 +12,6 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(params[:id])
     #debugger #Checking debugger
   end
 
@@ -27,9 +28,10 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
+        log_in @user
+        remember(@user)
         flash[:success] = "Welcome to the Sample App!"
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
@@ -74,5 +76,20 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    #Check if User is logged in, that only let them access protected page
+    def logged_in_user
+      unless logged_in?
+        store_location #coming from which URL
+        flash[:danger] = "Kindly Log In"
+        redirect_to login_url
+      end
+    end
+
+    #Check if the user is editing his/her own protected page 
+    def check_current_user?
+      @user = set_user;
+      redirect_to root_path unless current_user?@user
     end
 end

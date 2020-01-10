@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
         remember user
-        format.html{ redirect_to user, notice: 'Welcome back' }
+        format.html{ redirect_back_or(user)}
       else
         flash.now[:danger]="Wrong Username and password"
         format.html{ render 'new'}

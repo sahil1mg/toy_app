@@ -17,6 +17,10 @@ module SessionsHelper
         end
     end
 
+    def current_user?(user) 
+        current_user == user
+    end
+
     def logged_in?
         !current_user.nil?
     end
@@ -28,6 +32,7 @@ module SessionsHelper
         @current_user = nil
     end
 
+    #storing cookie
     def remember(user)
         user.remember
         cookies.permanent.signed[:user_id] = user.id
@@ -39,5 +44,17 @@ module SessionsHelper
         user.forget
         cookies.delete(:user_id)
         cookies.delete(:remember_token)
+    end
+
+    #Storing last url if user wanted to open an url but couldn't as he/she was not logged
+    def store_location
+        puts request #checking what it has
+        session[:forwarding_url] = request.original_url if request.get?
+    end
+
+    #friendly forwarding
+    def redirect_back_or(default)
+        redirect_to session[:forwarding_url] || default # checks if first is not nil then first else default
+        session.delete(:forwarding_url)
     end
 end
