@@ -41,6 +41,10 @@ group :development, :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'bcrypt',         '3.1.12'
+  gem 'faker',          '1.7.3'
+  gem 'will_paginate',           '3.1.6'
+  gem 'bootstrap-will_paginate', '1.0.0'
+  gem 'rails-controller-testing', '1.0.4'
 end
 
 group :development do

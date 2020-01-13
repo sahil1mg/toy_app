@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-    attr_accessor :remember_token
+    attr_accessor :remember_token, :admin
+    alias :admin? :admin
     before_save { email.downcase! }
     has_many :microposts
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
