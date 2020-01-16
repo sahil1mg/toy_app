@@ -5,4 +5,8 @@ class Micropost < ApplicationRecord
     def to_s
         id.to_s+' '+content
     end
+
+    def kichbhi
+        puts "ashdjska"
+    end
 end
