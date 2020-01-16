@@ -7,13 +7,15 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     #@users = User.all
-    @users = User.paginate(page: params[:page])
+    #@users = User.paginate(page: params[:page])
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
     #debugger #Checking debugger
+    redirect_to root_url and return unless @user.activated == true
   end
 
   # GET /users/new
@@ -31,11 +33,12 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
-        log_in @user
-        remember(@user)
-        flash[:success] = "Welcome to the Sample App!"
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        #log_in @user
+        #remember(@user)
+        @user.send_activation_email
+        flash[:success] = "Check your email"
+        format.html { redirect_to root_url, notice: 'Please check email to activate account' }
+        #format.json { render :show, status: :created, location: @user }
       else
         flash[:failure] = "Some Error occured!"
         format.html { render :new }
@@ -64,7 +67,7 @@ class UsersController < ApplicationController
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
+      format.json { render json: @user.errors, status: :unprocessable_entity }
     end
   end
 
@@ -96,6 +99,6 @@ class UsersController < ApplicationController
 
     # Confirms an admin user.
     def admin_user
-      redirect_to(root_url) unless current_user.admin?
+      redirect_to(root_url) unless (current_user && current_user.admin?)
     end
 end

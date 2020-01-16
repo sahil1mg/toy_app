@@ -2,6 +2,7 @@ require 'test_helper'
 
 class MicropostsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:one)
     @micropost = microposts(:one)
   end
 
@@ -17,10 +18,12 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create micropost" do
     puts @micropost.to_s
+    puts Micropost.count
+    post microposts_url, params: { micropost: { content: @micropost.content, user_id: @micropost.user_id } }
+    puts Micropost.count
     assert_difference('Micropost.count') do
       post microposts_url, params: { micropost: { content: @micropost.content, user_id: @micropost.user_id } }
     end
-
     assert_redirected_to micropost_url(Micropost.last)
   end
 
