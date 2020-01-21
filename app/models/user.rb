@@ -3,7 +3,7 @@ class User < ApplicationRecord
     alias :admin? :admin
     before_save { email.downcase! }
     before_create {create_activation_token}
-    has_many :microposts
+    has_many :microposts, dependent: :destroy
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
     validates :name, presence:true
     validates :email, presence:true, format: { with: VALID_EMAIL_REGEX}, uniqueness:{case_sensitive:false}
@@ -47,6 +47,12 @@ class User < ApplicationRecord
 
     def send_password_reset_email
         UserMailer.password_reset(self).deliver_now
+    end
+
+    # Defines a proto-feed.
+    # See "Following users" for the full implementation.
+    def feed
+        Micropost.where("user_id = ?", id)
     end
 
     private

@@ -16,11 +16,12 @@
   </section>
 </aside>
 <div class = "col-md-8">
-    <% if @user.microposts.first!=nil %>
-      <p>
-        <h3>Micropost:</h3>
-        <%= @user.microposts.first.content %>
-      </p>
+    <% if @user.microposts.any? %>
+    <h3>Microposts (<%= @user.microposts.count %>)</h3>
+    <ol class="microposts">
+      <%= render @microposts %>
+    </ol>
+    <%= will_paginate @microposts %>
     <% end %>
     <%= link_to 'Edit', edit_user_path(@user) %> |
     <%= link_to 'Back', users_path %>

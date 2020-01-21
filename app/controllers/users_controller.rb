@@ -15,6 +15,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     #debugger #Checking debugger
+    @microposts = @user.microposts.paginate(page: params[:page])
     redirect_to root_url and return unless @user.activated == true
   end
 
@@ -80,15 +81,6 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
-
-    #Check if User is logged in, that only let them access protected page
-    def logged_in_user
-      unless logged_in?
-        store_location #coming from which URL
-        flash[:danger] = "Kindly Log In"
-        redirect_to login_url
-      end
     end
 
     #Check if the user is editing his/her own protected page 
