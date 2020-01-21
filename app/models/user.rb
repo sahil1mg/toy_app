@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    attr_accessor :remember_token, :admin, :activation_token
+    attr_accessor :remember_token, :admin, :activation_token, :password_reset_token
     alias :admin? :admin
     before_save { email.downcase! }
     before_create {create_activation_token}
@@ -31,12 +31,22 @@ class User < ApplicationRecord
 
     # Activates an account.
     def activate
-        update_attribute(activated:    true, activated_at: Time.zone.now)
+        update_attributes(activated: true, activated_at: Time.zone.now)
     end
 
     # Sends activation email.
     def send_activation_email
         UserMailer.account_activation(self).deliver_now
+    end
+
+    def create_reset_digest
+        self.password_reset_token = User.new_token
+        reset_digest = User.digest(password_reset_token)
+        update_attributes(reset_digest: reset_digest, resent_at: Time.zone.now)
+    end
+
+    def send_password_reset_email
+        UserMailer.password_reset(self).deliver_now
     end
 
     private
@@ -56,5 +66,10 @@ class User < ApplicationRecord
     def create_activation_token
         self.activation_token  = User.new_token
         self.activation_digest = User.digest(activation_token)
+    end
+
+    # Returns true if a password reset has expired.
+    def password_reset_expired?
+        reset_sent_at < 2.hours.ago
     end
 end
