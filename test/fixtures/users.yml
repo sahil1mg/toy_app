@@ -21,11 +21,27 @@ michael:
 
 archer:
   name: Sterling Archer
-  email: duchess@example.gov
+  email: duke@example.gov
   password_digest: <%= User.digest('password') %>
   admin: false
   activated_at: <%= Time.zone.now %>
   activated: true
+
+malory:
+  name: Malory Granger
+  email: duchess@example.gov
+  password_digest: <%= User.digest('password') %>
+  admin: false
+  activated_at: <%= Time.zone.now %>
+  activated: true  
+
+lana:
+  name: Lana Rose
+  email: crown_princess@example.gov
+  password_digest: <%= User.digest('password') %>
+  admin: false
+  activated_at: <%= Time.zone.now %>
+  activated: true  
 
 <% 30.times do |n| %>
 user_<%= n %>:
