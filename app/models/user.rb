@@ -14,9 +14,9 @@ class User < ApplicationRecord
     has_many :followers, through: :passive_relationships, source: :follower
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
     validates :name, presence:true
-    validates :email, presence:true, format: { with: VALID_EMAIL_REGEX}, uniqueness:{case_sensitive:false}
-    validates :password, presence:true, length: { minimum: 6 }
-    validates :password_confirmation, presence:true, length: { minimum: 6 }
+    validates :email, presence:true, format: { with: VALID_EMAIL_REGEX}, uniqueness:{case_sensitive:false, scope: :deleted_at}
+    validates :password, presence:true, length: { minimum: 6 }, on: [:create]
+    validates :password_confirmation, presence:true, length: { minimum: 6 }, on: [:create]
     has_secure_password
 
     # Forgets a user.
